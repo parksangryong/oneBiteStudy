@@ -3,48 +3,44 @@ import style from "./page.module.css";
 import { BookData } from "@/types/types";
 
 async function AllBooks() {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`, {
-      cache: "force-cache",
-    });
-    const allBooks: BookData[] = await response.json();
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`, {
+    cache: "force-cache",
+  });
 
-    return (
-      <div>
-        {allBooks.map((book) => (
-          <BookItem key={`reco-${book.id}`} {...book} />
-        ))}
-      </div>
-    );
-  } catch (error) {
-    console.error(error);
-    return <div>에러가 발생했습니다.</div>;
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
+  const allBooks: BookData[] = await response.json();
+
+  return (
+    <div>
+      {allBooks.map((book) => (
+        <BookItem key={`reco-${book.id}`} {...book} />
+      ))}
+    </div>
+  );
 }
 
 async function RecoBooks() {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/book/random`,
-      {
-        next: {
-          revalidate: 5,
-        },
-      }
-    );
-    const recoBooks: BookData[] = await response.json();
-
-    return (
-      <div>
-        {recoBooks.map((book) => (
-          <BookItem key={`reco-${book.id}`} {...book} />
-        ))}
-      </div>
-    );
-  } catch (error) {
-    console.error(error);
-    return <div>에러가 발생했습니다.</div>;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/book/random`,
+    {
+      cache: "no-store",
+    }
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
+
+  const recoBooks: BookData[] = await response.json();
+
+  return (
+    <div>
+      {recoBooks.map((book) => (
+        <BookItem key={`reco-${book.id}`} {...book} />
+      ))}
+    </div>
+  );
 }
 
 export default async function Page() {
