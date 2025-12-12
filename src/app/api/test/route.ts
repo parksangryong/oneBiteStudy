@@ -1,3 +1,7 @@
-export function GET() {
-  return new Response("테스트 API 입니다.");
+import { revalidateTag } from "next/cache";
+
+export async function GET() {
+  await revalidateTag("random-books", "default");
+
+  return new Response("random-books 태그가 리밸리드되었습니다.");
 }
