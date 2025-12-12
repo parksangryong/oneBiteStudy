@@ -1,5 +1,4 @@
 import style from "./page.module.css";
-import books from "@/mock/books.json";
 import { BookData } from "@/types/types";
 
 export default async function Page({
@@ -10,7 +9,10 @@ export default async function Page({
   try {
     const { id } = await params;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/book/${id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/book/${id}`,
+      {
+        cache: "force-cache",
+      }
     );
     if (!response.ok) {
       throw new Error(response.statusText);

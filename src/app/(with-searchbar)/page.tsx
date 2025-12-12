@@ -27,9 +27,8 @@ async function RecoBooks() {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/book/random`,
       {
-        cache: "force-cache",
         next: {
-          tags: ["random-books"],
+          revalidate: 5,
         },
       }
     );
