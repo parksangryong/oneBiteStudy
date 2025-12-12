@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@fontsource/noto-sans-kr"; // Defaults to weight 400
 import "@fontsource/noto-sans-kr/400.css";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,8 +15,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="ko-KR">
+      <body>
+        <header>
+          <Link href="/">index</Link>
+          &nbsp;
+          <Link href="/search">Search</Link>
+          &nbsp;
+          <Link href="/book/1">book/1</Link>
+        </header>
+        {children}
+      </body>
     </html>
   );
 }
