@@ -1,6 +1,17 @@
 import style from "./page.module.css";
 import { BookData } from "@/types/types";
 
+export async function generateStaticParams() {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`);
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  const books: BookData[] = await response.json();
+  return books.map((book) => ({ id: book.id.toString() }));
+}
+
+export const dynamicParams = false;
+
 export default async function Page({
   params,
 }: {
