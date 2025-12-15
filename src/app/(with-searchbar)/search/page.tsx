@@ -1,10 +1,9 @@
 import BookItem from "@/components/book-item";
+import BookItemSkeleton from "@/components/book-item-skeleton";
 import { BookData } from "@/types/types";
-import { delay } from "@/util/delay";
 import { Suspense } from "react";
 
 async function SearchBooks({ q }: { q: string }) {
-  await delay(3000);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/book/search?q=${q}`,
     {
@@ -36,7 +35,12 @@ export default async function Page({
 
     return (
       <div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          key={Math.random() + Date.now()}
+          fallback={new Array(3).fill(0).map((_, index) => (
+            <BookItemSkeleton key={`search-skeleton-${index}`} />
+          ))}
+        >
           <SearchBooks q={q || ""} />
         </Suspense>
       </div>
