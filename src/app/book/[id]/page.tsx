@@ -1,6 +1,7 @@
 import style from "./page.module.css";
-import { BookData } from "@/types/types";
+import { BookData, ReviewData } from "@/types/types";
 import ReviewEditor from "@/components/review_editor";
+import ReviewItem from "@/components/review-item";
 
 export async function generateStaticParams() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book`);
@@ -46,6 +47,24 @@ async function BookDetail({ id }: { id: string }) {
   );
 }
 
+async function ReviewList({ id }: { id: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/review/book/${id}`
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  const reviews: ReviewData[] = await response.json();
+
+  return (
+    <section>
+      {reviews.map((review) => (
+        <ReviewItem key={review.id} {...review} />
+      ))}
+    </section>
+  );
+}
+
 export default async function Page({
   params,
 }: {
@@ -57,6 +76,7 @@ export default async function Page({
     <div className={style.container}>
       <BookDetail id={id} />
       <ReviewEditor id={id} />
+      <ReviewList id={id} />
     </div>
   );
 }
