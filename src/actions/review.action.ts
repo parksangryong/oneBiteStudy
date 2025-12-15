@@ -9,7 +9,7 @@ export async function createReview(prevState: unknown, formData: FormData) {
   const author = formData.get("author");
 
   if (!id || !content || !author) {
-    throw new Error("모든 필수 필드를 입력해주세요.");
+    return { success: false, message: "모든 필수 필드를 입력해주세요." };
   }
 
   try {
@@ -26,7 +26,6 @@ export async function createReview(prevState: unknown, formData: FormData) {
 
     return { success: true, message: "리뷰가 작성되었습니다." };
   } catch (error) {
-    console.error(error);
     return { success: false, message: "리뷰 작성에 실패했습니다: " + error };
   }
 }

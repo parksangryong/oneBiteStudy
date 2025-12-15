@@ -9,7 +9,7 @@ export default function ReviewEditor({ id }: { id: string }) {
   const [state, action, isPending] = useActionState(createReview, null);
 
   useEffect(() => {
-    if (state && state.success) {
+    if (state && !state.success) {
       alert(state.message);
     }
   }, [state]);
