@@ -36,3 +36,8 @@
   gap: 5px;
   justify-content: flex-end;
 }
+
+.container button:disabled {
+  background-color: rgb(220, 220, 220);
+  cursor: not-allowed;
+}

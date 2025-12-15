@@ -1,6 +1,9 @@
 "use server";
 
-export async function createReview(formData: FormData) {
+import { revalidateTag } from "next/cache";
+import { delay } from "@/util/delay";
+
+export async function createReview(prevState: unknown, formData: FormData) {
   const id = formData.get("id");
   const content = formData.get("content");
   const author = formData.get("author");
@@ -18,7 +21,12 @@ export async function createReview(formData: FormData) {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+
+    revalidateTag(`review-${id}`, { expire: 0 });
+
+    return { success: true, message: "리뷰가 작성되었습니다." };
   } catch (error) {
     console.error(error);
+    return { success: false, message: "리뷰 작성에 실패했습니다: " + error };
   }
 }
